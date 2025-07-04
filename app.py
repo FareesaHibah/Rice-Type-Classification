@@ -7,11 +7,11 @@ from sklearn.ensemble import RandomForestClassifier
 
 st.set_page_config(page_title="Rice Type Classifier", layout="centered")
 
-st.title("🌾 Rice Type Classification App")
+st.title("Rice Type Classification App")
 st.markdown("Predict whether a rice grain is **Cammeo** or **Osmancik** based on its morphological features.")
 
 # Input fields
-st.header("📥 Enter Grain Features")
+st.header("Enter Grain Features")
 
 area = st.number_input("Area", min_value=0.0, value=12000.0)
 perimeter = st.number_input("Perimeter", min_value=0.0, value=400.0)
@@ -36,14 +36,14 @@ def load_model():
 model = load_model()
 
 # Prediction
-if st.button("🔍 Predict Rice Type"):
+if st.button("Predict Rice Type"):
     features = np.array([[area, perimeter, major_axis, minor_axis, eccentricity, convex_area, extent]])
     prediction = model.predict(features)[0]
     label = "Cammeo" if prediction == 0 else "Osmancik"
-    st.success(f"✅ The predicted rice type is: **{label}**")
+    st.success(f"The predicted rice type is: **{label}**")
 
 # Optional: show model info
-with st.expander("ℹ️ About this App"):
+with st.expander("ℹAbout this App"):
     st.markdown("""
     - Built with **Streamlit**
     - Uses **Random Forest Classifier**
