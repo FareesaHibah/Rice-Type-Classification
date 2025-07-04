@@ -6,3 +6,4 @@ scikit-learn
 graphviz
 scipy
 streamlit
+joblib
