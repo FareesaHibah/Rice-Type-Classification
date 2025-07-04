@@ -43,7 +43,7 @@ if st.button("Predict Rice Type"):
     st.success(f"The predicted rice type is: **{label}**")
 
 # Optional: show model info
-with st.expander("ℹAbout this App"):
+with st.expander("About this App"):
     st.markdown("""
     - Built with **Streamlit**
     - Uses **Random Forest Classifier**
