@@ -25,6 +25,30 @@ def set_background(image_file):
     else:
         st.warning("Background image not found.")
 
+# --- Apply Glassmorphism Style ---
+def apply_glassmorphism():
+    st.markdown("""
+    <style>
+    .frosted-container {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        margin: 3rem auto;
+        width: 90%;
+        max-width: 1000px;
+    }
+
+    /* Optional: Style headings and inputs for better contrast */
+    .frosted-container h1, .frosted-container label, .frosted-container p {
+        color: #1f2937;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
 # --- Load Model ---
 @st.cache_resource
 def load_model():
@@ -32,6 +56,7 @@ def load_model():
 
 # --- Main App ---
 set_background("bg.png")
+apply_glassmorphism()
 
 with st.container():
     st.markdown("<div class='frosted-container'>", unsafe_allow_html=True)
