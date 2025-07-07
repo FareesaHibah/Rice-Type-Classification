@@ -1,3 +1,4 @@
+
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -32,8 +33,9 @@ def apply_transparent_container():
         padding: 2rem;
         border-radius: 15px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        margin-top: 2rem;
-        margin-bottom: 2rem;
+        margin: auto;
+        width: 90%;
+        max-width: 1000px;
     }
     </style>
     """, unsafe_allow_html=True)
