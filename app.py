@@ -22,22 +22,29 @@ def set_background(image_file):
         </style>
         """, unsafe_allow_html=True)
 
-# --- Apply Glassmorphism Style to Streamlit containers ---
 def apply_glassmorphism():
     st.markdown("""
     <style>
-    section.main > div.block-container {
+    .glass-container {
         background: rgba(255, 255, 255, 0.15);
         border-radius: 20px;
         padding: 2rem;
-        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        margin-top: 4rem;
+        margin: 4rem auto;
+        width: 90%;
+        max-width: 1000px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
     }
     </style>
     """, unsafe_allow_html=True)
+
+def glass_container_start():
+    st.markdown('<div class="glass-container">', unsafe_allow_html=True)
+
+def glass_container_end():
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # --- Mock Model for Testing ---
 class MockModel:
@@ -52,6 +59,7 @@ def load_model():
 # --- Main App ---
 set_background("bg.png")  # Replace with your image file
 apply_glassmorphism()
+glass_container_start()
 
 # --- All widgets now live inside the styled Streamlit container ---
 st.title("Rice Type Classifier")
@@ -96,3 +104,5 @@ with st.expander("ℹ️ What Do These Features Mean?"):
     - **Convex Area**: Area of outer boundary  
     - **Extent**: Compactness in bounding box
     """)
+    
+glass_container_end()
