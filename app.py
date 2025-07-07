@@ -69,7 +69,7 @@ model = load_model()
 
 if st.button("Predict Rice Type"):
     features = pd.DataFrame([[area, perimeter, major_axis, minor_axis, eccentricity, convex_area, extent]],
-                            columns=["Area", "Perimeter", "MajorAxisLength", "MinorAxisLength", "Eccentricity", "ConvexArea", "Extent"])
+                            columns=['Area', 'Perimeter', 'Major_Axis_Length', 'Minor_Axis_Length', 'Eccentricity', 'Convex_Area', 'Extent'])
     prediction = model.predict(features)[0]
     proba = model.predict_proba(features)[0]
 
