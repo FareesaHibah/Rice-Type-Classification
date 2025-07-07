@@ -76,11 +76,11 @@ if st.button("Predict Rice Type"):
         label = "Uncertain"
     st.success(f"The predicted rice type is: **{label}**")
 
-st.markdown(f"""
-    <h3 style='color:#006400; text-align:center;'>
-        Predicted Rice Type: <b>{label}</b>
-    </h3>
-""", unsafe_allow_html=True)
+    st.markdown(f"""
+        <h3 style='color:#006400; text-align:center;'>
+            Predicted Rice Type: <b>{label}</b>
+        </h3>
+    """, unsafe_allow_html=True)
 
     # Probability chart
     fig, ax = plt.subplots()
