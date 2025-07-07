@@ -26,7 +26,7 @@ with col2:
     convex_area = st.number_input("Convex Area (mm²)", min_value=0.0, value=12500.0)
     extent = st.number_input("Extent", min_value=0.0, max_value=1.0, value=0.75)
 
-# Load pre-trained model or simulate for demo
+# Load pre-trained model or simulate a model
 @st.cache_resource
 def load_model():
     try:
@@ -40,14 +40,12 @@ def load_model():
 
 model = load_model()
 
-# Predict button and result
-if st.button("Identify Rice Type"):
+# Prediction
+if st.button("Predict Rice Type"):
     features = np.array([[area, perimeter, major_axis, minor_axis, eccentricity, convex_area, extent]])
     prediction = model.predict(features)[0]
-    probabilities = model.predict_proba(features)[0]
-
     label = "Cammeo" if prediction == 0 else "Osmancik"
-    st.success(f"The identified rice type is: **{label}**")
+    st.success(f"The predicted rice type is: **{label}**")
 
     # Probability chart
     fig, ax = plt.subplots()
