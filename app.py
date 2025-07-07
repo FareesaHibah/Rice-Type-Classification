@@ -13,12 +13,12 @@ st.markdown("Predict whether a rice grain is **Cammeo** or **Osmancik** based on
 # Input fields
 st.header("Enter Grain Features")
 
-area = st.number_input("Area", min_value=0.0, value=12000.0)
-perimeter = st.number_input("Perimeter", min_value=0.0, value=400.0)
-major_axis = st.number_input("Major Axis Length", min_value=0.0, value=200.0)
-minor_axis = st.number_input("Minor Axis Length", min_value=0.0, value=100.0)
+area = st.number_input("Area in mm²", min_value=0.0, value=12000.0)
+perimeter = st.number_input("Perimeter in mm", min_value=0.0, value=400.0)
+major_axis = st.number_input("Major Axis Length in mm", min_value=0.0, value=200.0)
+minor_axis = st.number_input("Minor Axis Length in mm", min_value=0.0, value=100.0)
 eccentricity = st.number_input("Eccentricity", min_value=0.0, max_value=1.0, value=0.8)
-convex_area = st.number_input("Convex Area", min_value=0.0, value=12500.0)
+convex_area = st.number_input("Convex Area in mm²", min_value=0.0, value=12500.0)
 extent = st.number_input("Extent", min_value=0.0, max_value=1.0, value=0.75)
 
 # Load pre-trained model or simulate a model
