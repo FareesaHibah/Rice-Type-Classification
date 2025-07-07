@@ -1,7 +1,6 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-import joblib
 import matplotlib.pyplot as plt
 import base64
 import os
@@ -29,7 +28,7 @@ def set_background(image_file):
 def apply_glassmorphism():
     st.markdown("""
     <style>
-    .frosted-container {
+    .glass-box {
         background: rgba(255, 255, 255, 0.15);
         border-radius: 20px;
         padding: 2rem;
@@ -37,34 +36,36 @@ def apply_glassmorphism():
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.18);
-        margin: 3rem auto;
+        margin: 4rem auto;
         width: 90%;
         max-width: 1000px;
     }
-
-    /* Optional: Style headings and inputs for better contrast */
-    .frosted-container h1, .frosted-container label, .frosted-container p {
+    .glass-box h1, .glass-box label, .glass-box p {
         color: #1f2937;
     }
     </style>
     """, unsafe_allow_html=True)
-    
-# --- Load Model ---
-@st.cache_resource
+
+# --- Mock Model for Testing ---
+class MockModel:
+    def predict(self, X):
+        return [0 if X.iloc[0, 0] < 13000 else 1]
+    def predict_proba(self, X):
+        return [[0.7, 0.3]] if X.iloc[0, 0] < 13000 else [[0.2, 0.8]]
+
 def load_model():
-    return joblib.load("model.pkl")
+    return MockModel()
 
 # --- Main App ---
-set_background("bg.png")
+set_background("bg.png")  # Replace with your image file
 apply_glassmorphism()
 
 with st.container():
-    st.markdown("<div class='frosted-container'>", unsafe_allow_html=True)
+    st.markdown("<div class='glass-box'>", unsafe_allow_html=True)
 
-    st.markdown('<h1 style="color:#2a5c2a;">Rice Type Classifier</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="color:#2a5c2a;">🌾 Rice Type Classifier</h1>', unsafe_allow_html=True)
     st.markdown("Enter the grain's morphological features to predict whether it's **Cammeo** or **Osmancik**.")
 
-    # --- Input Fields ---
     col1, col2 = st.columns(2)
     with col1:
         area = st.number_input("Area (mm²)", value=12000.0)
@@ -76,10 +77,9 @@ with st.container():
         convex_area = st.number_input("Convex Area (mm²)", value=12500.0)
         extent = st.number_input("Extent", min_value=0.0, max_value=1.0, value=0.75)
 
-    # --- Prediction ---
     model = load_model()
 
-    if st.button("Predict Rice Type"):
+    if st.button("🔍 Predict Rice Type"):
         features = pd.DataFrame([[area, perimeter, major_axis, minor_axis, eccentricity, convex_area, extent]],
                                 columns=['Area', 'Perimeter', 'Major_Axis_Length', 'Minor_Axis_Length', 'Eccentricity', 'Convex_Area', 'Extent'])
         try:
@@ -89,7 +89,6 @@ with st.container():
             label = "Cammeo" if prediction == 0 else "Osmancik"
             st.success(f"The predicted rice type is: **{label}**")
 
-            # --- Probability Bar Chart ---
             fig, ax = plt.subplots()
             ax.bar(["Cammeo", "Osmancik"], proba, color=["#a2c957", "#5c8a8a"])
             ax.set_ylim(0, 1)
@@ -100,8 +99,7 @@ with st.container():
         except Exception as e:
             st.error(f"Prediction failed: {e}")
 
-    # --- Feature Explanation ---
-    with st.expander("What Do These Features Mean?"):
+    with st.expander("ℹ️ What Do These Features Mean?"):
         st.markdown("""
         - **Area**: Surface area of the rice grain  
         - **Perimeter**: Boundary length  
