@@ -21,14 +21,12 @@ def set_background(image_file):
         }}
         </style>
         """, unsafe_allow_html=True)
-    else:
-        st.warning("Background image not found.")
 
 # --- Apply Glassmorphism Style ---
 def apply_glassmorphism():
     st.markdown("""
     <style>
-    .glass-box {
+    .glass-container {
         background: rgba(255, 255, 255, 0.15);
         border-radius: 20px;
         padding: 2rem;
@@ -39,9 +37,6 @@ def apply_glassmorphism():
         margin: 4rem auto;
         width: 90%;
         max-width: 1000px;
-    }
-    .glass-box h1, .glass-box label, .glass-box p {
-        color: #1f2937;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -57,11 +52,13 @@ def load_model():
     return MockModel()
 
 # --- Main App ---
-set_background("bg.png")  # Replace with your image file
+set_background("bg.png")
 apply_glassmorphism()
 
+# --- Wrap all content inside a native Streamlit container ---
 with st.container():
-    st.markdown("<div class='glass-box'>", unsafe_allow_html=True)
+    # Use HTML to apply the glass effect
+    st.markdown('<div class="glass-container">', unsafe_allow_html=True)
 
     st.markdown('<h1 style="color:#2a5c2a;">🌾 Rice Type Classifier</h1>', unsafe_allow_html=True)
     st.markdown("Enter the grain's morphological features to predict whether it's **Cammeo** or **Osmancik**.")
@@ -82,22 +79,18 @@ with st.container():
     if st.button("🔍 Predict Rice Type"):
         features = pd.DataFrame([[area, perimeter, major_axis, minor_axis, eccentricity, convex_area, extent]],
                                 columns=['Area', 'Perimeter', 'Major_Axis_Length', 'Minor_Axis_Length', 'Eccentricity', 'Convex_Area', 'Extent'])
-        try:
-            prediction = model.predict(features)[0]
-            proba = model.predict_proba(features)[0]
+        prediction = model.predict(features)[0]
+        proba = model.predict_proba(features)[0]
 
-            label = "Cammeo" if prediction == 0 else "Osmancik"
-            st.success(f"The predicted rice type is: **{label}**")
+        label = "Cammeo" if prediction == 0 else "Osmancik"
+        st.success(f"The predicted rice type is: **{label}**")
 
-            fig, ax = plt.subplots()
-            ax.bar(["Cammeo", "Osmancik"], proba, color=["#a2c957", "#5c8a8a"])
-            ax.set_ylim(0, 1)
-            ax.set_ylabel("Prediction Probability")
-            plt.tight_layout()
-            st.pyplot(fig)
-
-        except Exception as e:
-            st.error(f"Prediction failed: {e}")
+        fig, ax = plt.subplots()
+        ax.bar(["Cammeo", "Osmancik"], proba, color=["#a2c957", "#5c8a8a"])
+        ax.set_ylim(0, 1)
+        ax.set_ylabel("Prediction Probability")
+        plt.tight_layout()
+        st.pyplot(fig)
 
     with st.expander("ℹ️ What Do These Features Mean?"):
         st.markdown("""
