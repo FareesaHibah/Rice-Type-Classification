@@ -25,24 +25,6 @@ def set_background(image_file):
     else:
         st.warning("Background image not found.")
 
-# --- Apply Frosted Glass Container Style ---
-def apply_frosted_glass_style():
-    st.markdown("""
-    <style>
-    .frosted-container {
-        background-color: rgba(255, 255, 255, 0.65);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        margin: 3rem auto;
-        width: 90%;
-        max-width: 1000px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
 # --- Load Model ---
 @st.cache_resource
 def load_model():
@@ -50,7 +32,6 @@ def load_model():
 
 # --- Main App ---
 set_background("bg.png")
-apply_frosted_glass_style()
 
 with st.container():
     st.markdown("<div class='frosted-container'>", unsafe_allow_html=True)
