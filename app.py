@@ -4,6 +4,27 @@ import pandas as pd
 import joblib
 import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
+import base64
+
+def set_background(image_file):
+    with open(image_file, "rb") as file:
+        encoded = base64.b64encode(file.read()).decode()
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/png;base64,{encoded}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+set_background("bg.png")  # your image file here
 
 # App configuration
 st.set_page_config(page_title="Rice Type Classifier", layout="centered")
