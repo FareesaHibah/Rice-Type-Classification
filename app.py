@@ -40,12 +40,6 @@ def apply_glassmorphism():
     </style>
     """, unsafe_allow_html=True)
 
-def glass_container_start():
-    st.markdown('<div class="glass-container">', unsafe_allow_html=True)
-
-def glass_container_end():
-    st.markdown('</div>', unsafe_allow_html=True)
-
 # --- Mock Model for Testing ---
 class MockModel:
     def predict(self, X):
@@ -59,7 +53,6 @@ def load_model():
 # --- Main App ---
 set_background("bg.png")  # Replace with your image file
 apply_glassmorphism()
-glass_container_start()
 
 # --- All widgets now live inside the styled Streamlit container ---
 st.title("Rice Type Classifier")
@@ -105,4 +98,3 @@ with st.expander("ℹ️ What Do These Features Mean?"):
     - **Extent**: Compactness in bounding box
     """)
     
-glass_container_end()
