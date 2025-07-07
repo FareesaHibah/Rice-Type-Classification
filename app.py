@@ -3,9 +3,10 @@ import numpy as np
 import pandas as pd
 import joblib
 import matplotlib.pyplot as plt
-from sklearn.ensemble import RandomForestClassifier
 import base64
+from sklearn.ensemble import RandomForestClassifier
 
+# 1. Set custom background
 def set_background(image_file):
     with open(image_file, "rb") as file:
         encoded = base64.b64encode(file.read()).decode()
@@ -24,28 +25,32 @@ def set_background(image_file):
         unsafe_allow_html=True
     )
 
-set_background("bg.png")  # your image file here
+# 2. Call background + apply frosted glass effect to main layout
+set_background("bg.png")
+
 st.markdown("""
     <style>
     .main > div {
-        background-color: rgba(255, 255, 255, 0.85);
+        background-color: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         padding: 2rem;
         border-radius: 15px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     </style>
 """, unsafe_allow_html=True)
 
-# App configuration
+# 3. App config and title
 st.set_page_config(page_title="Rice Type Classifier", layout="centered")
 
-# App title and description
-st.markdown('<h1 style="color:#00aaff;">Rice Type Classification App</h1>', unsafe_allow_html=True)
-st.markdown("Identify whether a rice grain is **Cammeo** or **Osmancik** based on its morphological features.")
+st.markdown("""
+    <h1 style='text-align:center; color:#00aaff;'>Rice Type Classification App</h1>
+    <p style='text-align:center;'>Identify whether a rice grain is <strong>Cammeo</strong> or <strong>Osmancik</strong> based on its morphological features.</p>
+""", unsafe_allow_html=True)
 
-# Input layout in two columns
+# 4. Input columns
 col1, col2 = st.columns(2)
-
 with col1:
     area = st.number_input("Area (mm²)", min_value=0.0, value=12000.0)
     perimeter = st.number_input("Perimeter (mm)", min_value=0.0, value=400.0)
@@ -57,39 +62,41 @@ with col2:
     convex_area = st.number_input("Convex Area (mm²)", min_value=0.0, value=12500.0)
     extent = st.number_input("Extent", min_value=0.0, max_value=1.0, value=0.75)
 
-# Load pre-trained model or simulate a model
+# 5. Load model
 @st.cache_resource
 def load_model():
     return joblib.load("model.pkl")
+
 model = load_model()
 
-# Prediction
+# 6. Prediction
 if st.button("Predict Rice Type"):
     features = np.array([[area, perimeter, major_axis, minor_axis, eccentricity, convex_area, extent]])
     prediction = model.predict(features)[0]
     probabilities = model.predict_proba(features)[0]
+
     if probabilities[0] > 0.8:
         label = "Cammeo"
     elif probabilities[1] > 0.8:
         label = "Osmancik"
     else:
         label = "Uncertain"
-    st.success(f"The predicted rice type is: **{label}**")
 
+    # Display result with transparent box
     st.markdown(f"""
-        <h3 style='color:#006400; text-align:center;'>
-            Predicted Rice Type: <b>{label}</b>
-        </h3>
+        <div style='background-color: rgba(255,255,255,0.7); padding: 1rem; border-radius: 10px; text-align: center;'>
+            <h3>Predicted Rice Type: <b>{label}</b></h3>
+        </div>
     """, unsafe_allow_html=True)
 
-    # Probability chart
+    # Probability bar chart
     fig, ax = plt.subplots()
     ax.bar(["Cammeo", "Osmancik"], probabilities, color=["orange", "green"])
     ax.set_ylabel("Prediction Probability")
     ax.set_ylim(0, 1)
     st.pyplot(fig)
 
-# Feature explanations
+# 7. Feature explanation
 with st.expander("What Do These Features Mean?"):
     st.markdown("""
     - **Area**: Surface area of the rice grain in mm²  
@@ -101,10 +108,12 @@ with st.expander("What Do These Features Mean?"):
     - **Extent**: Ratio of area to bounding box area (0–1)
     """)
 
-# Optional about section
+# 8. About section
 with st.expander("About this App"):
     st.markdown("""
     - Built with **Streamlit**  
     - Uses a **Random Forest Classifier**  
-    - Trained to classify rice grains as Cammeo or Osmancik
+    - Trained to classify rice grains as Cammeo or Osmancik  
+    - Data sourced from UCI Machine Learning Repository
     """)
+
