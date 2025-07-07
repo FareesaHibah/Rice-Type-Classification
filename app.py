@@ -37,7 +37,12 @@ if st.button("Predict Rice Type"):
     features = np.array([[area, perimeter, major_axis, minor_axis, eccentricity, convex_area, extent]])
     prediction = model.predict(features)[0]
     probabilities = model.predict_proba(features)[0]
-    label = "Cammeo" if prediction == 0 else "Osmancik"
+    if probabilities[0] > 0.8:
+        label = "Cammeo"
+    elif probabilities[1] > 0.8:
+        label = "Osmancik"
+    else:
+        label = "Uncertain"
     st.success(f"The predicted rice type is: **{label}**")
 
     # Probability chart
