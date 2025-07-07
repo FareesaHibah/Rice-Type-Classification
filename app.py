@@ -55,7 +55,7 @@ apply_frosted_glass_style()
 with st.container():
     st.markdown("<div class='frosted-container'>", unsafe_allow_html=True)
 
-    st.markdown('<h1 style="color:#2a5c2a;">🌾 Rice Type Classifier</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="color:#2a5c2a;">Rice Type Classifier</h1>', unsafe_allow_html=True)
     st.markdown("Enter the grain's morphological features to predict whether it's **Cammeo** or **Osmancik**.")
 
     # --- Input Fields ---
@@ -73,7 +73,7 @@ with st.container():
     # --- Prediction ---
     model = load_model()
 
-    if st.button("🔍 Predict Rice Type"):
+    if st.button("Predict Rice Type"):
         features = pd.DataFrame([[area, perimeter, major_axis, minor_axis, eccentricity, convex_area, extent]],
                                 columns=['Area', 'Perimeter', 'Major_Axis_Length', 'Minor_Axis_Length', 'Eccentricity', 'Convex_Area', 'Extent'])
         try:
@@ -95,7 +95,7 @@ with st.container():
             st.error(f"Prediction failed: {e}")
 
     # --- Feature Explanation ---
-    with st.expander("ℹ️ What Do These Features Mean?"):
+    with st.expander("What Do These Features Mean?"):
         st.markdown("""
         - **Area**: Surface area of the rice grain  
         - **Perimeter**: Boundary length  
