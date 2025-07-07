@@ -44,6 +44,7 @@ model = load_model()
 if st.button("Predict Rice Type"):
     features = np.array([[area, perimeter, major_axis, minor_axis, eccentricity, convex_area, extent]])
     prediction = model.predict(features)[0]
+    probabilities = model.predict_proba(features)[0]
     label = "Cammeo" if prediction == 0 else "Osmancik"
     st.success(f"The predicted rice type is: **{label}**")
 
