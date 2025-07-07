@@ -25,6 +25,22 @@ def set_background(image_file):
     )
 
 set_background("bg.png")  # your image file here
+st.markdown("""
+    <style>
+    .main > div {
+        background-color: rgba(255, 255, 255, 0.85);
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown(f"""
+    <h3 style='color:#006400; text-align:center;'>
+        Predicted Rice Type: <b>{label}</b>
+    </h3>
+""", unsafe_allow_html=True)
 
 # App configuration
 st.set_page_config(page_title="Rice Type Classifier", layout="centered")
