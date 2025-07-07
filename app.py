@@ -36,8 +36,8 @@ def load_model():
 set_background("bg.png")  # Replace with your image file
 
 # --- All widgets now live inside the styled Streamlit container ---
-st.title("Rice Type Classifier")
-st.markdown("Enter the grain's morphological features to predict whether it's **Cammeo** or **Osmancik**.")
+st.markdown("<h1 style='color: black;'>Rice Type Classifier</h1>", unsafe_allow_html=True)
+st.markdown("<p style='color: black;'>Enter the grain's morphological features to predict whether it's <strong>Cammeo</strong> or <strong>Osmancik</strong>.</p>", unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
 with col1:
@@ -52,7 +52,7 @@ with col2:
 
 model = load_model()
 
-if st.button("🔍 Predict Rice Type"):
+if st.button("Predict Rice Type"):
     features = pd.DataFrame([[area, perimeter, major_axis, minor_axis, eccentricity, convex_area, extent]],
                             columns=['Area', 'Perimeter', 'Major_Axis_Length', 'Minor_Axis_Length', 'Eccentricity', 'Convex_Area', 'Extent'])
     prediction = model.predict(features)[0]
@@ -68,7 +68,7 @@ if st.button("🔍 Predict Rice Type"):
     plt.tight_layout()
     st.pyplot(fig)
 
-with st.expander("ℹ️ What Do These Features Mean?"):
+with st.expander("What Do These Features Mean?"):
     st.markdown("""
     - **Area**: Surface area of the rice grain  
     - **Perimeter**: Boundary length  
