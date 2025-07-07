@@ -22,52 +22,6 @@ def set_background(image_file):
         </style>
         """, unsafe_allow_html=True)
 
-# def apply_glassmorphism():
-#     st.markdown("""
-#     <style>
-#     .glass-container {
-#         background: rgba(255, 255, 255, 0.15);
-#         border-radius: 20px;
-#         padding: 2rem;
-#         margin: 4rem auto;
-#         width: 90%;
-#         max-width: 1000px;
-#         backdrop-filter: blur(12px);
-#         -webkit-backdrop-filter: blur(12px);
-#         border: 1px solid rgba(255, 255, 255, 0.3);
-#         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-#     }
-#     </style>
-#     """, unsafe_allow_html=True)
-
-def apply_card_style():
-    st.markdown("""
-    <style>
-    /* Style the main content container like a card */
-    section.main > div.block-container {
-        background: rgba(255, 255, 255, 0.85);
-        border-radius: 16px;
-        padding: 2rem 3rem;
-        margin-top: 4rem;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        transition: all 0.3s ease-in-out;
-    }
-
-    /* Optional: soften the expander to match */
-    .streamlit-expander {
-        background: rgba(255, 255, 255, 0.6);
-        border-radius: 12px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .streamlit-expanderHeader {
-        font-weight: 600;
-        color: #2a5c2a;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
 # --- Mock Model for Testing ---
 class MockModel:
     def predict(self, X):
@@ -80,8 +34,6 @@ def load_model():
 
 # --- Main App ---
 set_background("bg.png")  # Replace with your image file
-# apply_glassmorphism()
-apply_card_style()
 
 # --- All widgets now live inside the styled Streamlit container ---
 st.title("Rice Type Classifier")
