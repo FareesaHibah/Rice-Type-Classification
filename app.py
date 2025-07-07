@@ -29,9 +29,7 @@ with col2:
 # Load pre-trained model or simulate a model
 @st.cache_resource
 def load_model():
-        model = joblib.load("model.pkl")
-    return model
-
+    return joblib.load("model.pkl")
 model = load_model()
 
 # Prediction
