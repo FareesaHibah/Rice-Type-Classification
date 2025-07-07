@@ -22,21 +22,19 @@ def set_background(image_file):
         </style>
         """, unsafe_allow_html=True)
 
-# --- Apply Glassmorphism Style ---
+# --- Apply Glassmorphism Style to Streamlit containers ---
 def apply_glassmorphism():
     st.markdown("""
     <style>
-    .glass-container {
+    section.main > div.block-container {
         background: rgba(255, 255, 255, 0.15);
         border-radius: 20px;
         padding: 2rem;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.18);
-        margin: 4rem auto;
-        width: 90%;
-        max-width: 1000px;
+        margin-top: 4rem;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -52,55 +50,49 @@ def load_model():
     return MockModel()
 
 # --- Main App ---
-set_background("bg.png")
+set_background("bg.png")  # Replace with your image file
 apply_glassmorphism()
 
-# --- Wrap all content inside a native Streamlit container ---
-with st.container():
-    # Use HTML to apply the glass effect
-    st.markdown('<div class="glass-container">', unsafe_allow_html=True)
+# --- All widgets now live inside the styled Streamlit container ---
+st.title("Rice Type Classifier")
+st.markdown("Enter the grain's morphological features to predict whether it's **Cammeo** or **Osmancik**.")
 
-    st.markdown('<h1 style="color:#2a5c2a;">🌾 Rice Type Classifier</h1>', unsafe_allow_html=True)
-    st.markdown("Enter the grain's morphological features to predict whether it's **Cammeo** or **Osmancik**.")
+col1, col2 = st.columns(2)
+with col1:
+    area = st.number_input("Area (mm²)", value=12000.0)
+    perimeter = st.number_input("Perimeter (mm)", value=400.0)
+    major_axis = st.number_input("Major Axis Length (mm)", value=200.0)
+    minor_axis = st.number_input("Minor Axis Length (mm)", value=100.0)
+with col2:
+    eccentricity = st.number_input("Eccentricity", min_value=0.0, max_value=1.0, value=0.8)
+    convex_area = st.number_input("Convex Area (mm²)", value=12500.0)
+    extent = st.number_input("Extent", min_value=0.0, max_value=1.0, value=0.75)
 
-    col1, col2 = st.columns(2)
-    with col1:
-        area = st.number_input("Area (mm²)", value=12000.0)
-        perimeter = st.number_input("Perimeter (mm)", value=400.0)
-        major_axis = st.number_input("Major Axis Length (mm)", value=200.0)
-        minor_axis = st.number_input("Minor Axis Length (mm)", value=100.0)
-    with col2:
-        eccentricity = st.number_input("Eccentricity", min_value=0.0, max_value=1.0, value=0.8)
-        convex_area = st.number_input("Convex Area (mm²)", value=12500.0)
-        extent = st.number_input("Extent", min_value=0.0, max_value=1.0, value=0.75)
+model = load_model()
 
-    model = load_model()
+if st.button("🔍 Predict Rice Type"):
+    features = pd.DataFrame([[area, perimeter, major_axis, minor_axis, eccentricity, convex_area, extent]],
+                            columns=['Area', 'Perimeter', 'Major_Axis_Length', 'Minor_Axis_Length', 'Eccentricity', 'Convex_Area', 'Extent'])
+    prediction = model.predict(features)[0]
+    proba = model.predict_proba(features)[0]
 
-    if st.button("🔍 Predict Rice Type"):
-        features = pd.DataFrame([[area, perimeter, major_axis, minor_axis, eccentricity, convex_area, extent]],
-                                columns=['Area', 'Perimeter', 'Major_Axis_Length', 'Minor_Axis_Length', 'Eccentricity', 'Convex_Area', 'Extent'])
-        prediction = model.predict(features)[0]
-        proba = model.predict_proba(features)[0]
+    label = "Cammeo" if prediction == 0 else "Osmancik"
+    st.success(f"The predicted rice type is: **{label}**")
 
-        label = "Cammeo" if prediction == 0 else "Osmancik"
-        st.success(f"The predicted rice type is: **{label}**")
+    fig, ax = plt.subplots()
+    ax.bar(["Cammeo", "Osmancik"], proba, color=["#a2c957", "#5c8a8a"])
+    ax.set_ylim(0, 1)
+    ax.set_ylabel("Prediction Probability")
+    plt.tight_layout()
+    st.pyplot(fig)
 
-        fig, ax = plt.subplots()
-        ax.bar(["Cammeo", "Osmancik"], proba, color=["#a2c957", "#5c8a8a"])
-        ax.set_ylim(0, 1)
-        ax.set_ylabel("Prediction Probability")
-        plt.tight_layout()
-        st.pyplot(fig)
-
-    with st.expander("ℹ️ What Do These Features Mean?"):
-        st.markdown("""
-        - **Area**: Surface area of the rice grain  
-        - **Perimeter**: Boundary length  
-        - **Major Axis Length**: Longest dimension  
-        - **Minor Axis Length**: Width of the grain  
-        - **Eccentricity**: Oval-ness (0–1)  
-        - **Convex Area**: Area of outer boundary  
-        - **Extent**: Compactness in bounding box
-        """)
-
-    st.markdown("</div>", unsafe_allow_html=True)
+with st.expander("ℹ️ What Do These Features Mean?"):
+    st.markdown("""
+    - **Area**: Surface area of the rice grain  
+    - **Perimeter**: Boundary length  
+    - **Major Axis Length**: Longest dimension  
+    - **Minor Axis Length**: Width of the grain  
+    - **Eccentricity**: Oval-ness (0–1)  
+    - **Convex Area**: Area of outer boundary  
+    - **Extent**: Compactness in bounding box
+    """)
