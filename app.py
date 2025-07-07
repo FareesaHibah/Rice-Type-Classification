@@ -29,13 +29,7 @@ with col2:
 # Load pre-trained model or simulate a model
 @st.cache_resource
 def load_model():
-    try:
         model = joblib.load("model.pkl")
-    except:
-        model = RandomForestClassifier(random_state=42)
-        X_dummy = np.random.rand(100, 7)
-        y_dummy = np.random.choice([0, 1], 100)
-        model.fit(X_dummy, y_dummy)
     return model
 
 model = load_model()
